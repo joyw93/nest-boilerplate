@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   HttpException,
@@ -11,6 +12,7 @@ import {
 import { HttpExceptionFilter } from 'src/common/exceptions/http-exception.filter';
 import { SuccessInterceptor } from 'src/common/interceptors/success.interceptor';
 import { AuthService } from './auth.service';
+import { CreateUserDto } from './dto/auth.create-user.dto';
 
 @Controller('auth')
 @UseInterceptors(SuccessInterceptor)
@@ -20,8 +22,7 @@ export class AuthController {
 
   @Get()
   getAllUsers() {
-    throw new HttpException('api is broken', 401);
-    return 'all User';
+    return this.authService.getAllUsers;
   }
 
   @Get(':id')
@@ -29,8 +30,8 @@ export class AuthController {
     return 'one user';
   }
 
-  @Post()
-  createUser() {
-    return 'create user';
+  @Post('create')
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    return await this.authService.createUser(createUserDto);
   }
 }
